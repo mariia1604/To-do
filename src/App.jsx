@@ -42,9 +42,10 @@ function App() {
           {
             todos.map(todo => {
               return (
-                <li className={todo.done ? "todo done" : "todo"} key={todos.id} onClick={() => toggleTodo(todo.id)}>
-                  {todo.text}
-                  <button className='delete' onClick={e => {
+                <li >
+                  <a className={todo.done ? "todo done" : "todo"} key={todos.id}>{todo.text}</a>
+                  <button className='complete'  id='complete_task' onClick={() => toggleTodo(todo.id)}>done</button>
+                  <button className='delete'  id='delete_task' onClick={e => {
                     e.stopPropagation();
                     removeTodo(todo.id);
                   }}>delete</button>
