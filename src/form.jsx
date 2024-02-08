@@ -15,6 +15,7 @@ function Form (props) {
         }
     }>
         <input type="text" placeholder='Enter task...' className='input' value={value} onChange={ e => setValue(e.target.value) } />
+        <button type="submit" id='add_task'>add</button>
     </form>
       
     </>
