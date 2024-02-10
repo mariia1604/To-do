@@ -9,30 +9,53 @@ html {
   background-color: #96DBD7;
 }
 
-.wrapper {
+.main {
   display: flex;
   flex-direction: column;
   width: 100wv;
   text-align: center;
+  gap: 30px;
 }
 
+.attention {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  color: #5a5a5a;
+  padding: 0;
+  margin: 0;
+}
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap:20px;
+}
+
+.added_task {
+  display: flex;
+  flex-direction: column;
+  width: 100wv;
+  text-align: center;
+  gap: 20px;
+}
 
 h1 {
   font-family: 'IBM Plex Mono', monospace;
   font-weight: 700;
   font-size: 48px;
   color: white;
+  padding: 0;
+  margin: 0;
 }
 
 .done {
   text-decoration: line-through;
 }
 
-li {
-  list-style: none;
-  display: flex;
-  align-items: center;
-  gap: 20px;
+.undone {
+  text-decoration: none;
 }
 
 .todo {
@@ -103,4 +126,8 @@ input:focus {
   align-items: center;
   justify-content: center;
   gap: 15px;
+}
+
+#add_task:hover, #complete_task:hover, #delete_task:hover {
+  background-color: white;
 }
