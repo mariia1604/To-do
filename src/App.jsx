@@ -1,60 +1,78 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
-import Form from './form'
 
 function App() {
+  const [array, setArray] = useState([])
+  const [task, setTask] = useState('')
 
-  const [todos, setTodos] = useState([])
+  useEffect(() => {
+    const taskList = JSON.parse(localStorage.getItem('list'))
+    if (taskList) {
+      setArray(taskList)
+    }
+  }, [])
 
-  const putTodo = (value) => {
-    if (value) {
-      setTodos([...todos, {id: Date.now(), text: value, done: false}])
+  const setList = (task) => {
+    if (task) {
+    setArray([...array, { task: task, done: false }])
+    localStorage.setItem('list', JSON.stringify([...array, { task: task, done: false }]))
     } else {
-      alert("Введите текст")
+      alert("You haven't entered anything :(")
     }
   }
 
-  const toggleTodo = (id) => {
-    setTodos(todos.map(todo => {
-      if (todo.id !== id) return todo;
-
-      return {
-        ...todo,
-        done: !todo.done
-      }
-    }))
+  const updateList = (index, value) => {
+    const updateArray = array.map((item, i) =>
+      i == index ? { ...item, task: value } : item
+    )
+    setArray(updateArray)
+    localStorage.setItem('list', JSON.stringify(updateArray))
   }
 
-  const removeTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id))
+  const done = (index) => {
+    const updateArray = array.map((item, i) =>
+      i == index ? { ...item, done: true } : item
+    )
+    setArray(updateArray)
+    localStorage.setItem('list', JSON.stringify(updateArray))
+  }
+
+  const deleteTask = (i) => {
+    const newArray = array.filter((a, index) => {
+      return index !== i
+    })
+    console.log(newArray);
+    setArray(newArray)
+    localStorage.setItem('list', JSON.stringify(newArray))
   }
 
   return (
     <>
-    <div className="wrapper">
-      <div className="container">
-        <h1 className="title">Add task</h1>
-        <Form 
-          putTodo={putTodo}
-        />
-        <h1 className="title">My tasks</h1>
-        <ul className="todos">
-          {
-            todos.map(todo => {
-              return (
-                <li >
-                  <a className={todo.done ? "todo done" : "todo"} key={todos.id}>{todo.text}</a>
-                  <button className='complete'  id='complete_task' onClick={() => toggleTodo(todo.id)}>done</button>
-                  <button className='delete'  id='delete_task' onClick={e => {
-                    e.stopPropagation();
-                    removeTodo(todo.id);
-                  }}>delete</button>
-                </li>
-              )
-            })
-          }
-        </ul>
+    <div className="main">
+      <div className="tasks">
+        <h1>Add task</h1>
+        <div className="form">
+          <input type="text" placeholder='Enter task...' className='input' value={task} onChange={(a) => setTask(a.target.value)} />
+          <button id='add_task' onClick={() => { setList(task); setTask('') }} className='btnAdd'>add</button>
+        </div>
       </div>
+      <div className="tasks">
+        <h1>My tasks</h1>
+        <p className="attention">*click on the note to edit it</p>
+        <div className="added_task">
+          {
+            array.map((e, index) => (
+              <div className="form" key={index}>
+                <input type="text" className={e.done ? "todo done" : "todo"} value={e.task} onChange={(a) => updateList(index, a.target.value)} />
+                <button id='complete_task' onClick={() => done(index)} className={e.done ? "todo_undone" : "todo_done"} >{e.done ? "undone" : "done"}</button>
+                <button id='delete_task' onClick={() => deleteTask(index)} className='delete'>delete</button>
+              </div>
+            ))
+          }
+        </div>
+          
+      </div>
+
     </div>
       
     </>
